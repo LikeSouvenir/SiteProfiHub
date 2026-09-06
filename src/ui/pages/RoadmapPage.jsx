@@ -11,10 +11,7 @@ const srDoneOf  = prog => prog.srDone  || []
 const kbDoneOf  = prog => prog.done    || []
 const doneOf    = (prog, mode) => mode === 'speedrun' ? srDoneOf(prog) : kbDoneOf(prog)
 
-const MODE_OPTIONS = [
-  { key: 'kb',       label: 'Roadmap',  icon: Icons.map,      color: 'var(--cr2)', bg: 'var(--crs)',           border: 'rgba(192,57,43,.4)',  glow: 'rgba(192,57,43,.22)' },
-  { key: 'speedrun', label: 'Speedrun', icon: Icons.speedrun, color: 'var(--go)',  bg: 'rgba(201,168,76,.16)', border: 'rgba(201,168,76,.45)', glow: 'rgba(201,168,76,.3)' },
-]
+
 
 // ══════════════════════════════════════════════
 //  LAYOUT BUILDER FOR SVG CANVAS (SNAKE ZIGZAG)
@@ -334,10 +331,7 @@ function DesktopRoadmapCanvas({
       <div className="rmbg" />
       <div className="rmgrid" />
 
-      {/* Floating Mode Switch */}
-      <div className="rm-switch-row desktop-floating">
-        <PillSwitch value={mode} onChange={setRoadmapMode} options={MODE_OPTIONS} size="lg" />
-      </div>
+
 
       {/* Overall Progress Badge */}
       {totalChaps > 0 && (
