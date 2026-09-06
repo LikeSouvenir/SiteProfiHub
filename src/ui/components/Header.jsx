@@ -56,7 +56,7 @@ export default function Header({ onSearch }) {
         <nav className="mob-tabnav">
           <NavLink to="/roadmap"   className={({ isActive }) => `mob-tab${isActive ? ' active' : ''}`}>
             <span className="mob-tab-ico">{Icons.map}</span>
-            <span className="mob-tab-lbl">Разделы</span>
+            <span className="mob-tab-lbl">Материалы</span>
           </NavLink>
           <NavLink to="/cases"     className={({ isActive }) => `mob-tab${isActive ? ' active' : ''}`}>
             <span className="mob-tab-ico">{Icons.cases}</span>
@@ -84,9 +84,12 @@ export default function Header({ onSearch }) {
     <>
       <header className="hdr">
         <nav className="hleft">
-          <NavLink to="/roadmap" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Roadmap</NavLink>
+          <NavLink to="/roadmap" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Материалы</NavLink>
           <NavLink to="/cases" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Кейсы</NavLink>
           <NavLink to="/tests" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Тесты</NavLink>
+          <button className="icon-btn" onClick={onSearch} title="Поиск (⌘K)">
+            {Icons.search}
+          </button>
         </nav>
         
         <div className="logo" onClick={() => navigate('/roadmap')}>
@@ -94,9 +97,6 @@ export default function Header({ onSearch }) {
         </div>
 
         <nav className="hright">
-          <button className="icon-btn" onClick={onSearch} title="Поиск (⌘K)">
-            {Icons.search}
-          </button>
           {syncBtn}
           <NavLink to="/bookmarks" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Закладки</NavLink>
           <NavLink to="/progress" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Прогресс</NavLink>
