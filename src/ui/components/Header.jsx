@@ -89,16 +89,14 @@ export default function Header({ onSearch }) {
           <NavLink to="/tests" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Тесты</NavLink>
         </nav>
         
-        <div className="hcenter">
-          <button className="icon-btn" onClick={onSearch} title="Поиск (⌘K)">
-            {Icons.search}
-          </button>
-          <div className="logo" onClick={() => navigate('/roadmap')}>
-            blockchain <span className="logo-s">champ</span>
-          </div>
+        <div className="logo" onClick={() => navigate('/roadmap')}>
+          blockchain <span className="logo-s">champ</span>
         </div>
 
         <nav className="hright">
+          <button className="icon-btn" onClick={onSearch} title="Поиск (⌘K)">
+            {Icons.search}
+          </button>
           {syncBtn}
           <NavLink to="/bookmarks" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Закладки</NavLink>
           <NavLink to="/progress" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Прогресс</NavLink>
