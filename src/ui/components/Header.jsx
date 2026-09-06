@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Icons } from './Icons'
 import { useApp } from '../../core/context/AppContext'
+import InfoModal from './InfoModal'
 
 const isMobile = () => window.innerWidth < 768
 
@@ -9,6 +10,7 @@ export default function Header({ onSearch }) {
   const navigate = useNavigate()
   const { syncStatus, syncNow } = useApp()
   const [mobile, setMobile] = useState(isMobile)
+  const [infoOpen, setInfoOpen] = useState(false)
 
   useEffect(() => {
     const h = () => setMobile(isMobile())
@@ -44,7 +46,7 @@ export default function Header({ onSearch }) {
             blockchain <span className="logo-s">champ</span>
           </div>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-            <a href="https://t.me/SomeSouvenir" target="_blank" rel="noreferrer" className="mob-search-btn donate-btn" title="Задать вопрос">💬</a>
+            <button className="mob-search-btn donate-btn" title="О проекте" onClick={() => setInfoOpen(true)}>ℹ️</button>
             {syncBtn}
             <button className="mob-search-btn" onClick={onSearch}>{Icons.search}</button>
           </div>
@@ -71,30 +73,34 @@ export default function Header({ onSearch }) {
             <span className="mob-tab-lbl">Прогресс</span>
           </NavLink>
         </nav>
+        {infoOpen && <InfoModal onClose={() => setInfoOpen(false)} />}
       </>
     )
   }
 
   return (
-    <header className="hdr">
-      <div className="logo" onClick={() => navigate('/roadmap')}>
-        blockchain <span className="logo-s">champ</span>
-      </div>
-      <nav className="hright">
-        <NavLink to="/roadmap"   className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.map} Roadmap</NavLink>
-        <NavLink to="/cases"     className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.cases} Кейсы</NavLink>
-        <NavLink to="/tests"     className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.check} Тесты</NavLink>
-        <NavLink to="/bookmarks" className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.bookmarkO} Закладки</NavLink>
-        <NavLink to="/progress"  className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.bars} Прогресс</NavLink>
-        <a href="https://t.me/SomeSouvenir" target="_blank" rel="noreferrer" className="nbtn donate-nav-btn" title="Задать вопрос">
-          <span className="donate-nav-ico">💬</span> Вопрос
-        </a>
-        {syncBtn}
-        <button className="sbtn" onClick={onSearch}>
-          {Icons.search}
-          <span className="kbd">⌘K</span>
-        </button>
-      </nav>
-    </header>
+    <>
+      <header className="hdr">
+        <div className="logo" onClick={() => navigate('/roadmap')}>
+          blockchain <span className="logo-s">champ</span>
+        </div>
+        <nav className="hright">
+          <NavLink to="/roadmap"   className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.map} Roadmap</NavLink>
+          <NavLink to="/cases"     className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.cases} Кейсы</NavLink>
+          <NavLink to="/tests"     className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.check} Тесты</NavLink>
+          <NavLink to="/bookmarks" className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.bookmarkO} Закладки</NavLink>
+          <NavLink to="/progress"  className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.bars} Прогресс</NavLink>
+          <button className="nbtn donate-nav-btn" title="О проекте" onClick={() => setInfoOpen(true)}>
+            <span className="donate-nav-ico">ℹ️</span> О проекте
+          </button>
+          {syncBtn}
+          <button className="sbtn" onClick={onSearch}>
+            {Icons.search}
+            <span className="kbd">⌘K</span>
+          </button>
+        </nav>
+      </header>
+      {infoOpen && <InfoModal onClose={() => setInfoOpen(false)} />}
+    </>
   )
 }
