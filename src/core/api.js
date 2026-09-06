@@ -81,10 +81,17 @@ export async function loadSectionsByKey(repoKey) {
   if (hit) { _sections[repoKey] = hit; return hit }
 
   const tree = await fetchRepoTree(repoKey)
+  
+  // Map repoKey to root folder
+  let rootPrefix = ''
+  if (repoKey === 'kb') rootPrefix = 'info/'
+  else if (repoKey === 'cases') rootPrefix = 'case/'
+  else if (repoKey === 'test' || repoKey === 'qb') rootPrefix = 'test/'
+
   const rootFolders = [...new Set(
     tree
-      .filter(f => f.type === 'blob' && f.path.includes('/'))
-      .map(f => f.path.split('/')[0])
+      .filter(f => f.type === 'blob' && f.path.startsWith(rootPrefix) && f.path.slice(rootPrefix.length).includes('/'))
+      .map(f => f.path.slice(rootPrefix.length).split('/')[0])
       .filter(n => !SKIP_FOLDERS.has(n))
   )].sort()
 
@@ -93,7 +100,7 @@ export async function loadSectionsByKey(repoKey) {
     title:  folder,
     color:  SECTION_COLORS[i % SECTION_COLORS.length],
     order:  i + 1,
-    ghPath: folder,
+    ghPath: rootPrefix + folder, // Full path in repo
     source: repoKey,
   }))
 
@@ -264,7 +271,7 @@ export async function loadQuizSections() {
   if (hit) { _quizSecs.ref = hit; return hit }
 
   const [tree, sections] = await Promise.all([
-    fetchTree(CFG.quizRepo, 'qb'),
+    fetchTree(CFG.repo, 'qb'),
     loadSectionsByKey('kb'),
   ])
 
@@ -293,14 +300,14 @@ export async function loadQuizByPath(qbPath) {
   const hit = getCached(cKey)
   if (hit) { _quizData[qbPath] = hit; return hit }
 
-  const tree   = _trees['qb'] || await fetchTree(CFG.quizRepo, 'qb')
+  const tree   = _trees['qb'] || await fetchTree(CFG.repo, 'qb')
   const prefix = qbPath.endsWith('/') ? qbPath : qbPath + '/'
   const files  = tree.filter(f => f.type === 'blob' && f.path.startsWith(prefix) && f.path.endsWith('.json'))
 
   const all = []
   await Promise.all(files.map(async f => {
     try {
-      const url  = `https://raw.githubusercontent.com/${CFG.quizRepo}/main/${f.path}`
+      const url  = `https://raw.githubusercontent.com/${CFG.repo}/main/${f.path}`
       const res  = await fetch(url)
       if (!res.ok) return
       const text = await res.text()

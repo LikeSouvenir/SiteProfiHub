@@ -8,6 +8,9 @@ export const CFG = {
 
 export const REPO_KEYS = {
   kb:       CFG.repo,
+  cases:    CFG.repo,
+  qb:       CFG.repo,
+  test:     CFG.repo,
 }
 
 export const SECTION_COLORS = [
