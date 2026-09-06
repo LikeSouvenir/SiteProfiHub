@@ -27,14 +27,19 @@ function buildLayout(sections, cols = 4) {
     const row = Math.floor(i / COLS)
     const isReverse = row % 2 === 1
     const col = isReverse ? (COLS - 1 - (i % COLS)) : (i % COLS)
+    
+    // Add organic stagger effect
+    const yStagger = (i % 2 === 0) ? -15 : 15
+    const xStagger = (row % 2 === 0) ? 0 : 20
+    
     return {
       id: sec.id,
       index: i,
       row,
       col,
       isReverse,
-      x: PAD + col * CW,
-      y: PAD + row * CH,
+      x: PAD + col * CW + xStagger,
+      y: PAD + row * CH + yStagger,
     }
   })
 

@@ -20,12 +20,12 @@ export default function InfoModal({ onClose }) {
         
         <div style={{ borderTop: '1px solid var(--br)', paddingTop: '20px', display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>Сайт сделал:</span>
-            <a href="https://t.me/DmitroZybroni" target="_blank" rel="noreferrer" style={{ color: 'var(--cr2)', textDecoration: 'none', fontWeight: 'bold' }}>@DmitroZybroni</a>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span>Задать вопрос / Связь:</span>
             <a href="https://t.me/SomeSouvenir" target="_blank" rel="noreferrer" style={{ color: 'var(--cr2)', textDecoration: 'none', fontWeight: 'bold' }}>@SomeSouvenir</a>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', color: 'var(--tx3)', marginTop: '12px' }}>
+            <span>Сайт сделал:</span>
+            <a href="https://t.me/DmitroZybroni" target="_blank" rel="noreferrer" style={{ color: 'var(--tx3)', textDecoration: 'none' }}>@DmitroZybroni</a>
           </div>
         </div>
       </div>

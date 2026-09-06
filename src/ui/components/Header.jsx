@@ -27,9 +27,11 @@ export default function Header({ onSearch }) {
     return () => window.removeEventListener('keydown', h)
   }, [onSearch, mobile])
 
+
+
   const syncBtn = (
     <button
-      className={`nbtn sync-btn${syncStatus === 'syncing' ? ' syncing' : syncStatus === 'done' ? ' sync-done' : ''}`}
+      className={`icon-btn sync-btn${syncStatus === 'syncing' ? ' syncing' : syncStatus === 'done' ? ' sync-done' : ''}`}
       onClick={syncNow}
       title="Обновить данные"
       disabled={syncStatus === 'syncing'}
@@ -81,23 +83,26 @@ export default function Header({ onSearch }) {
   return (
     <>
       <header className="hdr">
-        <div className="logo" onClick={() => navigate('/roadmap')}>
-          blockchain <span className="logo-s">champ</span>
-        </div>
-        <nav className="hright">
-          <NavLink to="/roadmap"   className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.map} Roadmap</NavLink>
-          <NavLink to="/cases"     className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.cases} Кейсы</NavLink>
-          <NavLink to="/tests"     className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.check} Тесты</NavLink>
-          <NavLink to="/bookmarks" className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.bookmarkO} Закладки</NavLink>
-          <NavLink to="/progress"  className={({ isActive }) => `nbtn${isActive ? ' non' : ''}`}>{Icons.bars} Прогресс</NavLink>
-          <button className="nbtn donate-nav-btn" title="О проекте" onClick={() => setInfoOpen(true)}>
-            <span className="donate-nav-ico">ℹ️</span> О проекте
-          </button>
-          {syncBtn}
-          <button className="sbtn" onClick={onSearch}>
+        <nav className="hleft">
+          <NavLink to="/roadmap" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Roadmap</NavLink>
+          <NavLink to="/cases" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Кейсы</NavLink>
+          <NavLink to="/tests" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Тесты</NavLink>
+        </nav>
+        
+        <div className="hcenter">
+          <button className="icon-btn" onClick={onSearch} title="Поиск (⌘K)">
             {Icons.search}
-            <span className="kbd">⌘K</span>
           </button>
+          <div className="logo" onClick={() => navigate('/roadmap')}>
+            blockchain <span className="logo-s">champ</span>
+          </div>
+        </div>
+
+        <nav className="hright">
+          {syncBtn}
+          <NavLink to="/bookmarks" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Закладки</NavLink>
+          <NavLink to="/progress" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Прогресс</NavLink>
+          <button className="nbtn" onClick={() => setInfoOpen(true)}>О проекте</button>
         </nav>
       </header>
       {infoOpen && <InfoModal onClose={() => setInfoOpen(false)} />}

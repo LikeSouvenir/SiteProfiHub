@@ -14,12 +14,13 @@ export const REPO_KEYS = {
 }
 
 export const SECTION_COLORS = [
-  '#363636', // Solidity gray
-  '#0055FF', // Waves blue
-  '#2F3136', // Hyperledger dark
   '#00FF66', // Neon green
-  '#8A2BE2', // Neon purple
   '#00FFFF', // Cyan
+  '#8A2BE2', // Neon purple
+  '#FF007A', // Neon pink
+  '#F3BA2F', // Yellow
+  '#0055FF', // Blue
+  '#FF4500', // Orange
 ]
 
 export const SKIP_FOLDERS = new Set(['meta', '.obsidian', '.git'])
