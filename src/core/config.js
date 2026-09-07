@@ -1,9 +1,8 @@
-// ── CONFIG ──
 export const CFG = {
   repo:         'LikeSouvenir/ProfiHub',
   branch:       'main',
   progressKey:  'blockchain_champ_progress',
-  cacheVersion: '1.0.1',
+  cacheVersion: '1.0.2',
 }
 
 export const REPO_KEYS = {

@@ -275,19 +275,35 @@ export async function loadQuizSections() {
     loadSectionsByKey('kb'),
   ])
 
-  const rootDirs = [...new Set(
-    tree.filter(f => f.type === 'blob' && f.path.includes('/')).map(f => f.path.split('/')[0])
+  // Look ONLY inside the "test/" folder in the repository
+  const prefix = 'test/'
+  const testFiles = tree.filter(f => f.type === 'blob' && f.path.startsWith(prefix) && f.path.endsWith('.json'))
+  
+  // The directories inside "test/" (or just the filenames if there are no subdirs)
+  // E.g. "test/solidity.json" -> "solidity"
+  const gethDirs = [...new Set(
+    testFiles.map(f => {
+      const rel = f.path.slice(prefix.length) // "solidity.json" or "geth/q1.json"
+      return rel.includes('/') ? rel.split('/')[0] : rel.replace('.json', '')
+    })
   )].sort()
 
-  _quizSecs.ref = rootDirs.map((dir, i) => {
-    const node  = buildQuizTree(tree, dir + '/')
-    const kbSec = sections.find(s => matchQbFolder([dir], s.ghPath))
+  _quizSecs.ref = gethDirs.map((dir, i) => {
+    // If it's a file "test/solidity.json", the prefix for it is "test/" and we check files.
+    // We can just construct a qbPath to pass to loadQuizByPath.
+    // If it's a directory "test/geth/...", qbPath is "test/geth".
+    // Wait, the API for loadQuizByPath uses qbPath.
+    const isDir = tree.some(f => f.path === prefix + dir && f.type === 'tree') || tree.some(f => f.path.startsWith(prefix + dir + '/'))
+    const qbPath = isDir ? prefix + dir : prefix + dir + '.json'
+    
+    // Attempt to match with a KB section for icon/color
+    const kbSec = sections.find(s => normStr(s.id) === normStr(dir))
+    
     return {
       id:     kbSec ? kbSec.id : dir.toLowerCase().replace(/\s+/g, '-'),
-      title:  kbSec ? kbSec.title : dir,
-      qbPath: dir,
+      title:  kbSec ? kbSec.title : slugToTitle(dir),
+      qbPath: qbPath,
       color:  kbSec ? kbSec.color : SECTION_COLORS[i % SECTION_COLORS.length],
-      ...node,
     }
   })
   setCached(cKey, _quizSecs.ref)
@@ -301,7 +317,10 @@ export async function loadQuizByPath(qbPath) {
   if (hit) { _quizData[qbPath] = hit; return hit }
 
   const tree   = _trees['qb'] || await fetchTree(CFG.repo, 'qb')
-  const prefix = qbPath.endsWith('/') ? qbPath : qbPath + '/'
+  
+  // qbPath might be "test/solidity.json" or "test/geth"
+  const isFile = qbPath.endsWith('.json')
+  const prefix = isFile ? qbPath : (qbPath.endsWith('/') ? qbPath : qbPath + '/')
   const files  = tree.filter(f => f.type === 'blob' && f.path.startsWith(prefix) && f.path.endsWith('.json'))
 
   const all = []
