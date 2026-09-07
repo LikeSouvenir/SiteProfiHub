@@ -1,10 +1,20 @@
 :root{
   --bg:#0d0e12;--bg-s:#12141a;--bg-c:#1a1d24;--bg-h:#232730;
+  --bgh:rgba(12,14,18,0.85);
   --br:#2a2e39;--br2:#3a404e;--br3:#4a5264;
   --cr:#00ff66;--cr2:#33ff88;--crg:rgba(0,255,102,.3);--crs:rgba(0,255,102,.1);
   --go:#0055ff;--tx:#e2e8f0;--tx2:#94a3b8;--tx3:#64748b;--txc:#cbd5e1;
   --ok:#0055ff;--ok2:#3377ff;--oks:rgba(0,85,255,.15);
   --fd:'Cormorant Garamond',serif;--fb:'Raleway',sans-serif;--fm:'JetBrains Mono',monospace;
+}
+
+.light-theme{
+  --bg:#f8fafc;--bg-s:#f1f5f9;--bg-c:#ffffff;--bg-h:#e2e8f0;
+  --bgh:rgba(248,250,252,0.85);
+  --br:#cbd5e1;--br2:#94a3b8;--br3:#64748b;
+  --cr:#00b347;--cr2:#00cc52;--crg:rgba(0,255,102,.2);--crs:rgba(0,255,102,.1);
+  --go:#0055ff;--tx:#0f172a;--tx2:#334155;--tx3:#475569;--txc:#1e293b;
+  --ok:#0055ff;--ok2:#3377ff;--oks:rgba(0,85,255,.15);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px;scroll-behavior:smooth}

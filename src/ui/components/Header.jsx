@@ -11,6 +11,14 @@ export default function Header({ onSearch }) {
   const { syncStatus, syncNow } = useApp()
   const [mobile, setMobile] = useState(isMobile)
   const [infoOpen, setInfoOpen] = useState(false)
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark')
+
+  useEffect(() => {
+    document.documentElement.className = theme === 'light' ? 'light-theme' : ''
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark')
 
   useEffect(() => {
     const h = () => setMobile(isMobile())
@@ -48,6 +56,9 @@ export default function Header({ onSearch }) {
             blockchain <span className="logo-s">champ</span>
           </div>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <button className="mob-search-btn" onClick={toggleTheme} title="Сменить тему">
+              {theme === 'dark' ? Icons.sun : Icons.moon}
+            </button>
             <button className="mob-search-btn donate-btn" title="О проекте" onClick={() => setInfoOpen(true)}>ℹ️</button>
             {syncBtn}
             <button className="mob-search-btn" onClick={onSearch}>{Icons.search}</button>
@@ -97,6 +108,9 @@ export default function Header({ onSearch }) {
         </div>
 
         <nav className="hright">
+          <button className="icon-btn" onClick={toggleTheme} title="Сменить тему">
+            {theme === 'dark' ? Icons.sun : Icons.moon}
+          </button>
           {syncBtn}
           <NavLink to="/bookmarks" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Закладки</NavLink>
           <NavLink to="/progress" className={({ isActive }) => `nbtn${isActive ? ' active' : ''}`}>Прогресс</NavLink>
