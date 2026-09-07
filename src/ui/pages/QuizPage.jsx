@@ -35,21 +35,25 @@ export default function QuizPage() {
 
   const sec = quizSec || kbSec || { title: qbPath, color: 'var(--acc)' }
 
-  const choose = optIdx => {
-    if (ans) return
-    setSel(optIdx)
+  const [userText, setUserText] = useState('')
+  const [isCorrect, setIsCorrect] = useState(false)
+
+  const submitAnswer = (e) => {
+    e.preventDefault()
+    if (ans || !userText.trim()) return
     setAns(true)
-    if (optIdx === qs[cur].a) setScore(s => s + 1)
+    const correct = userText.trim().toLowerCase() === qs[cur].a.trim().toLowerCase()
+    setIsCorrect(correct)
+    if (correct) setScore(s => s + 1)
   }
 
   const next = () => {
     if (cur + 1 >= qs.length) {
-      const finalScore = score + (sel === qs[cur].a ? 1 : 0)
-      const u = saveQuizResult(prog, qbPath, finalScore, qs.length)
+      const u = saveQuizResult(prog, qbPath, score, qs.length)
       setProg(u)
       setDone(true)
     } else {
-      setCur(c => c + 1); setSel(null); setAns(false)
+      setCur(c => c + 1); setUserText(''); setIsCorrect(false); setAns(false)
     }
   }
 
@@ -64,7 +68,7 @@ export default function QuizPage() {
           1. Репозиторий <code>question-base</code> публичный<br/>
           2. Папка <code>{qbPath}/</code> существует в репо<br/>
           3. .json файлы с вопросами внутри папки<br/>
-          4. Формат: <code>[{'{'}"q","opts","a","exp"{'}'}]</code>
+          4. Формат: <code>[{'{'}"q","a"{'}'}]</code>
         </div>
       </div>
     </div></div>
@@ -92,7 +96,7 @@ export default function QuizPage() {
         </div>
         <div className="qres-s">{sPct}% правильных</div>
         <div className="qres-btns">
-          <button className="bs" onClick={() => { setCur(0); setSel(null); setAns(false); setScore(0); setDone(false) }}>
+          <button className="bs" onClick={() => { setCur(0); setUserText(''); setIsCorrect(false); setAns(false); setScore(0); setDone(false) }}>
             Повторить
           </button>
           {kbSec && <button className="bs" onClick={() => navigate(`/section/${kbSec.id}`)}>К разделу</button>}
@@ -110,7 +114,7 @@ export default function QuizPage() {
         <button className="bbtn" onClick={() => navigate('/tests')}>← Тесты</button>
         <div className="quiz-prog-wrap">
           <div className="quiz-prog-bar">
-            <div className="quiz-prog-fill" style={{ width: progress + '%', background: sec.color }} />
+            <div className="quiz-prog-fill" style={{ width: progress + '%', background: sec.color || 'var(--cr2)' }} />
           </div>
           <span className="quiz-counter">{cur + 1}/{qs.length}</span>
         </div>
@@ -119,29 +123,35 @@ export default function QuizPage() {
 
       <div className="quiz-card">
         <div className="quiz-q">{q.q}</div>
-        <div className="quiz-opts">
-          {q.opts.map((opt, i) => {
-            let cls = 'qopt'
-            if (ans) {
-              if (i === q.a)   cls += ' correct'
-              if (i === sel && i !== q.a) cls += ' wrong'
-            } else if (i === sel) cls += ' sel'
-            return (
-              <div key={i} className={cls} onClick={() => choose(i)}>
-                <span className="qopt-letter">{String.fromCharCode(65 + i)}</span>
-                <span>{opt}</span>
-              </div>
-            )
-          })}
-        </div>
+        
+        <form className="quiz-input-form" onSubmit={submitAnswer}>
+          <input
+            type="text"
+            className="quiz-text-input"
+            value={userText}
+            onChange={e => setUserText(e.target.value)}
+            disabled={ans}
+            placeholder="Введите ответ..."
+            autoFocus
+          />
+          {!ans && <button type="submit" className="quiz-submit-btn" disabled={!userText.trim()}>Проверить</button>}
+        </form>
+
+        {ans && (
+          <div className={`quiz-result-msg ${isCorrect ? 'correct' : 'wrong'}`}>
+            {isCorrect ? '✅ Правильно!' : `❌ Неправильно. Верный ответ: ${q.a}`}
+          </div>
+        )}
+
         {ans && q.exp && (
           <div className="quiz-exp">
             <span className="quiz-exp-icon">💡</span>
             <span>{q.exp}</span>
           </div>
         )}
+        
         {ans && (
-          <button className="quiz-next" onClick={next}>
+          <button className="quiz-next" onClick={next} autoFocus>
             {cur + 1 >= qs.length ? 'Завершить' : 'Следующий →'}
           </button>
         )}
