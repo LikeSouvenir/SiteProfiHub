@@ -173,6 +173,9 @@ function RmNode({ sec, pos, NW, NH, prog, chapCounts, delay, mode }) {
   const isDone = total > 0 && done >= total
   const path   = mode === 'speedrun' ? `/speedrun/section/${sec.id}` : `/section/${sec.id}`
 
+  const noun = (total % 10 === 1 && total % 100 !== 11) ? 'глава' : 
+               ([2,3,4].includes(total % 10) && ![12,13,14].includes(total % 100)) ? 'главы' : 'глав'
+
   return (
     <div
       className={`rnode${isDone ? ' done' : ''}`}
@@ -193,7 +196,7 @@ function RmNode({ sec, pos, NW, NH, prog, chapCounts, delay, mode }) {
       )}
       <div className="rnode-top">
         <span style={{ color: sec.color }}><SectionIcon sec={sec} size={20} /></span>
-        <span className="rnode-num">{String(pos.index + 1).padStart(2, '0')}</span>
+        <span className="rnode-num">{total} {noun}</span>
       </div>
       <div className="rnode-title" style={{ color: sec.color }}>{sec.title}</div>
       <div className="rnode-bar">
